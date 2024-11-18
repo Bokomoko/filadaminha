@@ -1,0 +1,29 @@
+{
+  "files.exclude": {
+    "**/.venv": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/.idea": true,
+    "**/.history": true,
+    "**/logs": true,
+    "**/temp": true,
+    "**/__pycache__": true
+  },
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  "python.formatting.provider": "none",
+  "ruff.lint.args": [],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never"
+  },
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportUndefinedVariable": "none",
+    "reportUnboundVariable": "none",
+    "reportUnusedImport": "none"
+  }
+}

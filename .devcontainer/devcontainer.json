@@ -1,0 +1,76 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
+{
+	"name": "Fila Da Minha",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && curl -LsSf https://astral.sh/ruff/install.sh | sh",
+	"containerEnv": {
+		"UV_LINK_MODE": "copy"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"42crunch.vscode-openapi",
+				"amazonwebservices.amazon-q-vscode",
+				"bierner.github-markdown-preview",
+				"bierner.markdown-checkbox",
+				"bierner.markdown-emoji",
+				"bierner.markdown-footnotes",
+				"bierner.markdown-mermaid",
+				"bierner.markdown-preview-github-styles",
+				"bierner.markdown-yaml-preamble",
+				"charliermarsh.ruff",
+				"christian-kohler.path-intellisense",
+				"chrmarti.regex",
+				"clemenspeters.format-json",
+				"davidanson.vscode-markdownlint",
+				"donjayamanne.githistory",
+				"donjayamanne.python-environment-manager",
+				"ms-python.vscode-pylance",
+				"github.remotehub",
+				"github.vscode-pull-request-github",
+				"gruntfuggly.todo-tree",
+				"hbenl.vscode-test-explorer",
+				"humao.rest-client",
+				"janisdd.vscode-edit-csv",
+				"jock.svg",
+				"mechatroner.rainbow-csv",
+				"mhutchie.git-graph",
+				"mongodb.mongodb-vscode",
+				"ms-python.debugpy",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode-remote.remote-ssh",
+				"ms-vscode-remote.remote-ssh-edit",
+				"ms-vscode-remote.remote-wsl",
+				"ms-vscode-remote.vscode-remote-extensionpack",
+				"ms-vscode.makefile-tools",
+				"ms-vscode.remote-explorer",
+				"ms-vscode.remote-repositories",
+				"ms-vscode.remote-server",
+				"ms-vscode.test-adapter-converter",
+				"naumovs.color-highlight",
+				"oderwat.indent-rainbow",
+				"pamaron.pytest-runner",
+				"perkovec.emoji",
+				"rangav.vscode-thunder-client",
+				"redhat.vscode-yaml",
+				"renkun.reader",
+				"simonsiefke.svg-preview",
+				"sourcegraph.cody-ai",
+				"stylelint.vscode-stylelint",
+				"tomoki1207.pdf",
+				"usernamehw.errorlens",
+				"vscode-icons-team.vscode-icons",
+				"wesbos.theme-cobalt2"
+			]
+		}
+	}
+}
