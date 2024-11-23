@@ -1,0 +1,18 @@
+exclude = [
+  "venv",
+  "dist",
+  ".git",
+  "build",
+  "docs",
+  ".vscode",
+
+]
+indent-width = 4
+target-version = "py312"
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
