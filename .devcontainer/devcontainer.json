@@ -4,12 +4,20 @@
 	"name": "Fila Da Minha",
 	// Using Alpine Linux with manual Python installation via shell script
 	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
+	// Configure user and workspace
+	"remoteUser": "vscode",
+	"containerUser": "vscode",
 	// No features - Python, UV, and Ruff will be installed via shell script
 	// Container runtime configuration for Podman
 	"runArgs": [
 		"--userns=keep-id",
 		"--security-opt",
 		"label=disable"
+	],
+	// Mount Git configuration from host
+	"mounts": [
+		"source=${localEnv:HOME}/.gitconfig,target=/tmp/.gitconfig,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.ssh,target=/tmp/.ssh,type=bind,consistency=cached"
 	],
 	// Forward ports for FastAPI development
 	"forwardPorts": [
@@ -27,7 +35,7 @@
 		}
 	},
 	// Install UV, Ruff, then Python and project dependencies via shell script
-	"postCreateCommand": ".devcontainer/setup-alpine.sh",
+	"updateContentCommand": "sudo .devcontainer/setup.sh",
 	// Environment variables for development
 	"containerEnv": {
 		"UV_LINK_MODE": "copy",
@@ -35,7 +43,9 @@
 		"UV_PYTHON": "python3.12",
 		"SECRET_KEY": "dev-secret-key-change-in-production",
 		"HOST": "0.0.0.0",
-		"PORT": "3000"
+		"PORT": "3000",
+		"GIT_AUTHOR_NAME": "${localEnv:GIT_AUTHOR_NAME}",
+		"GIT_AUTHOR_EMAIL": "${localEnv:GIT_AUTHOR_EMAIL}"
 	},
 	"customizations": {
 		"vscode": {
@@ -90,8 +100,6 @@
 				"chrmarti.regex",
 				"perkovec.emoji",
 				"renkun.reader",
-				"amazonwebservices.amazon-q-vscode",
-				"sourcegraph.cody-ai",
 				// Theme
 				"wesbos.theme-cobalt2"
 			],
