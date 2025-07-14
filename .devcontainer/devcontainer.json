@@ -2,22 +2,67 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/alpine
 {
 	"name": "Fila Da Minha",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// Using fully qualified image name for Podman compatibility
 	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && curl -LsSf https://astral.sh/ruff/install.sh | sh",
+	// Features to add to the dev container - Python 3.12 support
+	"features": {
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "3.12",
+			"installTools": true
+		}
+	},
+	// Container runtime configuration for Podman
+	"runArgs": [
+		"--userns=keep-id",
+		"--security-opt",
+		"label=disable"
+	],
+	// Forward ports for FastAPI development
+	"forwardPorts": [
+		3000,
+		8000
+	],
+	"portsAttributes": {
+		"3000": {
+			"label": "FastAPI Server",
+			"onAutoForward": "notify"
+		},
+		"8000": {
+			"label": "FastAPI Alt Port",
+			"onAutoForward": "notify"
+		}
+	},
+	// Install tools and project dependencies after container creation
+	"postCreateCommand": ".devcontainer/setup.sh",
+	// Environment variables for development
 	"containerEnv": {
-		"UV_LINK_MODE": "copy"
+		"UV_LINK_MODE": "copy",
+		"SECRET_KEY": "dev-secret-key-change-in-production",
+		"HOST": "0.0.0.0",
+		"PORT": "3000"
 	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				// Python Development
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"charliermarsh.ruff",
+				"donjayamanne.python-environment-manager",
+				"pamaron.pytest-runner",
+				"hbenl.vscode-test-explorer",
+				"ms-vscode.test-adapter-converter",
+				// API Development & Testing
 				"42crunch.vscode-openapi",
-				"amazonwebservices.amazon-q-vscode",
+				"humao.rest-client",
+				"rangav.vscode-thunder-client",
+				// Git & GitHub
+				"github.vscode-pull-request-github",
+				"github.remotehub",
+				"donjayamanne.githistory",
+				"mhutchie.git-graph",
+				// Markdown Support
 				"bierner.github-markdown-preview",
 				"bierner.markdown-checkbox",
 				"bierner.markdown-emoji",
@@ -25,52 +70,52 @@
 				"bierner.markdown-mermaid",
 				"bierner.markdown-preview-github-styles",
 				"bierner.markdown-yaml-preamble",
-				"charliermarsh.ruff",
-				"christian-kohler.path-intellisense",
-				"chrmarti.regex",
-				"clemenspeters.format-json",
 				"davidanson.vscode-markdownlint",
-				"donjayamanne.githistory",
-				"donjayamanne.python-environment-manager",
-				"ms-python.vscode-pylance",
-				"github.remotehub",
-				"github.vscode-pull-request-github",
-				"gruntfuggly.todo-tree",
-				"hbenl.vscode-test-explorer",
-				"humao.rest-client",
-				"janisdd.vscode-edit-csv",
-				"jock.svg",
-				"mechatroner.rainbow-csv",
-				"mhutchie.git-graph",
-				"mongodb.mongodb-vscode",
-				"ms-python.debugpy",
-				"ms-python.python",
-				"ms-python.vscode-pylance",
-				"ms-vscode-remote.remote-containers",
-				"ms-vscode-remote.remote-ssh",
-				"ms-vscode-remote.remote-ssh-edit",
-				"ms-vscode-remote.remote-wsl",
-				"ms-vscode-remote.vscode-remote-extensionpack",
-				"ms-vscode.makefile-tools",
-				"ms-vscode.remote-explorer",
-				"ms-vscode.remote-repositories",
-				"ms-vscode.remote-server",
-				"ms-vscode.test-adapter-converter",
-				"naumovs.color-highlight",
-				"oderwat.indent-rainbow",
-				"pamaron.pytest-runner",
-				"perkovec.emoji",
-				"rangav.vscode-thunder-client",
-				"redhat.vscode-yaml",
-				"renkun.reader",
-				"simonsiefke.svg-preview",
-				"sourcegraph.cody-ai",
-				"stylelint.vscode-stylelint",
-				"tomoki1207.pdf",
+				// Code Quality & Formatting
 				"usernamehw.errorlens",
+				"oderwat.indent-rainbow",
+				"naumovs.color-highlight",
+				"gruntfuggly.todo-tree",
+				// File Management & Utilities
+				"christian-kohler.path-intellisense",
 				"vscode-icons-team.vscode-icons",
+				"clemenspeters.format-json",
+				"redhat.vscode-yaml",
+				"janisdd.vscode-edit-csv",
+				"mechatroner.rainbow-csv",
+				"jock.svg",
+				"simonsiefke.svg-preview",
+				"tomoki1207.pdf",
+				// Remote Development (Podman/Container support)
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode-remote.vscode-remote-extensionpack",
+				"ms-vscode.remote-explorer",
+				// Additional Tools
+				"chrmarti.regex",
+				"perkovec.emoji",
+				"renkun.reader",
+				"amazonwebservices.amazon-q-vscode",
+				"sourcegraph.cody-ai",
+				// Theme
 				"wesbos.theme-cobalt2"
-			]
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.terminal.activateEnvironment": true,
+				"python.linting.enabled": true,
+				"python.linting.ruffEnabled": true,
+				"python.formatting.provider": "none",
+				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": "explicit"
+					}
+				},
+				"files.associations": {
+					"*.toml": "toml"
+				}
+			}
 		}
 	}
 }
