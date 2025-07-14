@@ -27,21 +27,24 @@ class Queue(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     description: str
+    queue_url : str
+    encoded_qr_url: str
     status: QueueStatus = QueueStatus.ACTIVE
     items: List[QueueItem] = []
 
-# In-memory storage (replace with database in production)
-queues = {}
+    # create a method that automaically adds the encoded qr code of the queue upon creation
+
+
 
 class QueueCreate(BaseModel):
-    name: str
-    password: str
+    name: str = Field(...,min_length=3,max_length=50)
+    password: str = Field(..., min_length=3, max_length=50)
     end_time: datetime
-    limit_size: int
+    limit_size: int = Field(..., ge=1)
     time_limit: Optional[int] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
-    description: str
+    description: str = Field(..., min_length=3, max_length=100)
 
 class JoinQueue(BaseModel):
     name: str

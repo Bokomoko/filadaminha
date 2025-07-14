@@ -1,46 +1,36 @@
 import uuid
-from asyncio import queues
 
-import qrcode
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
+from .config.Settings import BASE_URL
 from .models import JoinQueue, Queue, QueueCreate, QueueStatus
+from .utils import create_qr_code
 
+list_of_queues = {}
 router = APIRouter()
 
 @router.post("/queue/create")
 async def create_queue(queue_data: QueueCreate):
-    queue_id = str(uuid.uuid4())
 
     new_queue = Queue(
-        id=queue_id,
-        **queue_data.dict()
+        id=str(uuid.uuid4()),
+        **queue_data.model_dump()
     )
-
-    queues[queue_id] = new_queue
-
-    # Generate QR Code
-    qr = qrcode.QRCode(version=1, box_size=10, border=5)
-    queue_url = f"http://localhost:8000/queue/{queue_id}"
-    qr.add_data(queue_url)
-    qr.make(fit=True)
-
-    qr_image = qr.make_image(fill_color="black", back_color="white")
-    qr_filename = f"qr_{queue_id}.png"
-    qr_image.save(qr_filename)
-
+    new_queue.queue_url = f"{BASE_URL}/queue/join/{new_queue.id}"
+    new_queue.encoded_qr_url = create_qr_code(new_queue.queue_url)
+    list_of_queues[new_queue.id] = (new_queue)
     return {
-        "queue_id": queue_id,
-        "queue_url": queue_url,
-        "qr_code_url": f"http://localhost:8000/qr/{queue_id}"
+        "queue_id": new_queue.id,
+        "queue_url": new_queue.queue_url,
+        "queue_qr_code" : new_queue.encoded_qr_url
     }
 
 @router.get("/queue/{queue_id}")
 async def show_queue(queue_id: str, password: str):
-    if queue_id not in queues:
+    if queue_id not in list_of_queues:
         raise HTTPException(status_code=404, detail="Queue not found")
 
-    queue = queues[queue_id]
+    queue = list_of_queues[queue_id]
     if queue.password != password:
         raise HTTPException(status_code=401, detail="Invalid password")
 

@@ -18,6 +18,7 @@ class Settings:
   SECRET_KEY: str = "secret_key"
   HOST = os.getenv("HOST", "localhost")
   PORT = int(os.getenv("PORT", "3000"))
+  BASE_URL = os.getenv("BASE_URL", "HTTP://{HOST}localhost:{PORT}/queues/")
   SESSION_DURATION_MINUTES = 60
 
 
