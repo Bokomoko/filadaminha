@@ -27,6 +27,7 @@ echo "🐍 Installing UV..."
 if ! command -v uv &> /dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
     source ~/.profile
+    export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # Install Ruff (Python linter/formatter)
@@ -34,7 +35,13 @@ echo "🧹 Installing Ruff..."
 if ! command -v ruff &> /dev/null; then
     curl -LsSf https://astral.sh/ruff/install.sh | sh
     source ~/.profile
+    export PATH="$HOME/.cargo/bin:$PATH"
 fi
+
+# Verify UV and Ruff installations
+echo "🔍 Verifying UV and Ruff installations..."
+uv --version
+ruff --version
 
 # Verify Python installation
 echo "🔍 Verifying Python installation..."
@@ -44,11 +51,20 @@ which python3
 # Install project dependencies
 echo "📚 Installing project dependencies..."
 if [ -f "pyproject.toml" ]; then
+    # Create virtual environment with UV
+    uv venv --python 3.12
+    # Install dependencies
     uv sync
     echo "✅ Dependencies installed successfully"
+    echo "✅ Virtual environment created with UV"
 else
     echo "⚠️  pyproject.toml not found, skipping dependency installation"
 fi
+
+# Configure Python path
+echo "🔧 Configuring Python environment..."
+echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
 # Set up git configuration (if not already set)
 if [ -z "$(git config --global user.name)" ]; then

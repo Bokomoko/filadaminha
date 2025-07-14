@@ -37,6 +37,8 @@
 	// Environment variables for development
 	"containerEnv": {
 		"UV_LINK_MODE": "copy",
+		"UV_COMPILE_BYTECODE": "1",
+		"UV_PYTHON": "python3.12",
 		"SECRET_KEY": "dev-secret-key-change-in-production",
 		"HOST": "0.0.0.0",
 		"PORT": "3000"
@@ -105,15 +107,23 @@
 				"python.linting.enabled": true,
 				"python.linting.ruffEnabled": true,
 				"python.formatting.provider": "none",
+				"ruff.enable": true,
+				"ruff.organizeImports": true,
+				"ruff.fixAll": true,
 				"[python]": {
 					"editor.defaultFormatter": "charliermarsh.ruff",
 					"editor.formatOnSave": true,
 					"editor.codeActionsOnSave": {
-						"source.organizeImports": "explicit"
+						"source.organizeImports": "explicit",
+						"source.fixAll.ruff": "explicit"
 					}
 				},
 				"files.associations": {
 					"*.toml": "toml"
+				},
+				"terminal.integrated.env.linux": {
+					"UV_LINK_MODE": "copy",
+					"UV_COMPILE_BYTECODE": "1"
 				}
 			}
 		}
