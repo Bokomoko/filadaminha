@@ -2,15 +2,9 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/alpine
 {
 	"name": "Fila Da Minha",
-	// Using fully qualified image name for Podman compatibility
+	// Using Alpine Linux with manual Python installation via shell script
 	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
-	// Features to add to the dev container - Python 3.12 support
-	"features": {
-		"ghcr.io/devcontainers/features/python:1": {
-			"version": "3.12",
-			"installTools": true
-		}
-	},
+	// No features - Python, UV, and Ruff will be installed via shell script
 	// Container runtime configuration for Podman
 	"runArgs": [
 		"--userns=keep-id",
@@ -32,8 +26,8 @@
 			"onAutoForward": "notify"
 		}
 	},
-	// Install tools and project dependencies after container creation
-	"postCreateCommand": ".devcontainer/setup.sh",
+	// Install UV, Ruff, then Python and project dependencies via shell script
+	"postCreateCommand": ".devcontainer/setup-alpine.sh",
 	// Environment variables for development
 	"containerEnv": {
 		"UV_LINK_MODE": "copy",
@@ -102,7 +96,7 @@
 				"wesbos.theme-cobalt2"
 			],
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.defaultInterpreterPath": "/usr/bin/python3",
 				"python.terminal.activateEnvironment": true,
 				"python.linting.enabled": true,
 				"python.linting.ruffEnabled": true,
@@ -123,7 +117,8 @@
 				},
 				"terminal.integrated.env.linux": {
 					"UV_LINK_MODE": "copy",
-					"UV_COMPILE_BYTECODE": "1"
+					"UV_COMPILE_BYTECODE": "1",
+					"PATH": "${env:PATH}:${env:HOME}/.cargo/bin"
 				}
 			}
 		}

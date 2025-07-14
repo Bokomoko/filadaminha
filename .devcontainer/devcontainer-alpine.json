@@ -1,0 +1,128 @@
+// Dev Container configuration for Alpine Linux (alternative)
+// This configuration installs Python manually instead of using the feature
+{
+  "name": "Fila Da Minha (Alpine)",
+  // Using Alpine with manual Python installation
+  "image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
+  // No Python feature - will be installed manually in postCreateCommand
+  // "features": {},
+  // Container runtime configuration for Podman
+  "runArgs": [
+    "--userns=keep-id",
+    "--security-opt",
+    "label=disable"
+  ],
+  // Forward ports for FastAPI development
+  "forwardPorts": [
+    3000,
+    8000
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "FastAPI Server",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "FastAPI Alt Port",
+      "onAutoForward": "notify"
+    }
+  },
+  // Install Python, UV, Ruff and dependencies manually
+  "postCreateCommand": ".devcontainer/setup-alpine.sh",
+  // Environment variables for development
+  "containerEnv": {
+    "UV_LINK_MODE": "copy",
+    "UV_COMPILE_BYTECODE": "1",
+    "UV_PYTHON": "python3.12",
+    "SECRET_KEY": "dev-secret-key-change-in-production",
+    "HOST": "0.0.0.0",
+    "PORT": "3000"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Python Development
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "charliermarsh.ruff",
+        "donjayamanne.python-environment-manager",
+        "pamaron.pytest-runner",
+        "hbenl.vscode-test-explorer",
+        "ms-vscode.test-adapter-converter",
+        // API Development & Testing
+        "42crunch.vscode-openapi",
+        "humao.rest-client",
+        "rangav.vscode-thunder-client",
+        // Git & GitHub
+        "github.vscode-pull-request-github",
+        "github.remotehub",
+        "donjayamanne.githistory",
+        "mhutchie.git-graph",
+        // Markdown Support
+        "bierner.github-markdown-preview",
+        "bierner.markdown-checkbox",
+        "bierner.markdown-emoji",
+        "bierner.markdown-footnotes",
+        "bierner.markdown-mermaid",
+        "bierner.markdown-preview-github-styles",
+        "bierner.markdown-yaml-preamble",
+        "davidanson.vscode-markdownlint",
+        // Code Quality & Formatting
+        "usernamehw.errorlens",
+        "oderwat.indent-rainbow",
+        "naumovs.color-highlight",
+        "gruntfuggly.todo-tree",
+        // File Management & Utilities
+        "christian-kohler.path-intellisense",
+        "vscode-icons-team.vscode-icons",
+        "clemenspeters.format-json",
+        "redhat.vscode-yaml",
+        "janisdd.vscode-edit-csv",
+        "mechatroner.rainbow-csv",
+        "jock.svg",
+        "simonsiefke.svg-preview",
+        "tomoki1207.pdf",
+        // Remote Development (Podman/Container support)
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "ms-vscode.remote-explorer",
+        // Additional Tools
+        "chrmarti.regex",
+        "perkovec.emoji",
+        "renkun.reader",
+        "amazonwebservices.amazon-q-vscode",
+        "sourcegraph.cody-ai",
+        // Theme
+        "wesbos.theme-cobalt2"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "none",
+        "ruff.enable": true,
+        "ruff.organizeImports": true,
+        "ruff.fixAll": true,
+        "ruff.lint.enable": true,
+        "ruff.format.enable": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll.ruff": "explicit"
+          }
+        },
+        "files.associations": {
+          "*.toml": "toml"
+        },
+        "terminal.integrated.env.linux": {
+          "UV_LINK_MODE": "copy",
+          "UV_COMPILE_BYTECODE": "1"
+        }
+      }
+    }
+  }
+}

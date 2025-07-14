@@ -1,21 +1,30 @@
-# Dev Container Configuration for Podman
+# Dev Container Configuration for Alpine Linux with Podman
 
-Este diretório contém a configuração do Dev Container otimizada para usar **Podman** em vez do Docker tradicional.
+Este diretório contém a configuração do Dev Container otimizada para **Alpine Linux** usando **Podman** com instalação manual de Python, UV e Ruff via shell script.
 
-## 🐳 Configuração Podman
+## 🐳 Configuração Alpine + Podman
 
 ### Características Principais
 
+- **Alpine Linux**: Base leve e eficiente
 - **Rootless containers**: Execução sem privilégios administrativos
 - **User namespace mapping**: Mantém ownership dos arquivos
-- **Security optimized**: Configurações de segurança aprimoradas
+- **Instalação via Shell**: UV → Ruff → Python (ordem específica)
 - **Fully qualified image names**: Compatibilidade total com registries
 
 ### Imagem Base
 
+**Configuração Atual (Alpine):**
 ```
 mcr.microsoft.com/devcontainers/base:alpine-3.20
 ```
+
+### Ordem de Instalação
+
+1. **UV** (Python package manager) - Instalado primeiro via curl
+2. **Ruff** (linter/formatter) - Instalado segundo via curl
+3. **Python 3.12** - Instalado terceiro via apk
+4. **Dependências do projeto** - Instaladas por último via UV
 
 ## 🚀 Como Usar
 
@@ -35,9 +44,18 @@ O Dev Container está configurado com:
 
 ### Iniciando o Ambiente
 
+**Configuração Alpine (Atual):**
 1. Abra o projeto no VS Code
 2. Execute: `Ctrl+Shift+P` → `Dev Containers: Reopen in Container`
-3. Aguarde a configuração automática
+3. Aguarde a instalação automática: UV → Ruff → Python → Dependências
+4. Teste o setup com: `.devcontainer/test-setup.sh`
+
+### Verificação da Instalação
+
+Execute o script de teste para verificar se tudo foi instalado corretamente:
+```bash
+.devcontainer/test-setup.sh
+```
 
 ## 🛠 Ferramentas Incluídas
 
@@ -80,15 +98,38 @@ O Dev Container está configurado com:
 
 ```
 .devcontainer/
-├── devcontainer.json    # Configuração principal
-├── setup.sh            # Script de inicialização
-├── podman.conf         # Configuração específica do Podman
-└── README.md           # Esta documentação
+├── devcontainer.json        # Configuração Alpine (principal)
+├── setup-alpine.sh         # Script instalação Alpine (UV→Ruff→Python)
+├── test-setup.sh           # Script de verificação da instalação
+├── podman.conf             # Configuração específica do Podman
+└── README.md               # Esta documentação
 ```
 
 ## 🔧 Troubleshooting
 
 ### Problemas Comuns
+
+### Problemas Comuns
+
+#### Ordem de Instalação Incorreta
+```bash
+# Se UV ou Ruff não funcionarem, verifique a ordem:
+.devcontainer/test-setup.sh
+```
+
+**Solução**: O script garante a ordem: UV → Ruff → Python → Dependências
+
+#### UV ou Ruff não encontrados
+```bash
+command not found: uv
+command not found: ruff
+```
+
+**Solução**: Adicione o PATH do Cargo:
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
+source ~/.bashrc
+```
 
 #### Permissões de Arquivo
 ```bash

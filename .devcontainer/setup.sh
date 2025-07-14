@@ -8,19 +8,21 @@ echo "🚀 Setting up Fila da Minha development environment..."
 
 # Update system packages
 echo "📦 Updating system packages..."
-apk update && apk upgrade
+apt-get update && apt-get upgrade -y
 
 # Install system dependencies
 echo "🔧 Installing system dependencies..."
-apk add --no-cache \
+apt-get install -y \
     git \
     curl \
     wget \
     bash \
     zsh \
-    build-base \
+    build-essential \
     libffi-dev \
-    openssl-dev
+    libssl-dev \
+    python3-dev \
+    python3-pip
 
 # Install UV (Python package manager)
 echo "🐍 Installing UV..."

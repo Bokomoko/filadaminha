@@ -56,7 +56,8 @@
   "terminal.integrated.env.linux": {
     "UV_LINK_MODE": "copy",
     "UV_COMPILE_BYTECODE": "1",
-    "PYTHONPATH": "${workspaceFolder}/src"
+    "PYTHONPATH": "${workspaceFolder}/src",
+    "PATH": "${env:PATH}:${env:HOME}/.cargo/bin"
   },
   "python.analysis.diagnosticSeverityOverrides": {
     "reportMissingImports": "none",
